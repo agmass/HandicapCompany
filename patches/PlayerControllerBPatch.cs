@@ -28,6 +28,7 @@ namespace HandicapCompany.patches {
             Plugin.Instance.weighty = false;
             Plugin.Instance.paranoid = false;
             Plugin.Instance.conductive = false;
+            Plugin.Instance.extrovert = false;
             GameNetworkManager.Instance.localPlayerController.carryWeight = 1f;
             HUDManager.Instance.HideHUD(false);
             IngamePlayerSettings.Instance.LoadSettingsFromPrefs();
@@ -55,7 +56,41 @@ namespace HandicapCompany.patches {
                 }
                 if (__instance.insanityLevel >= 50) {
                     Plugin.Instance.modScareFactor = 0.76f;
-                    if (Plugin.Instance.timeSinceLastDmg >= 0.25) {
+                    if (Plugin.Instance.timeSinceLastDmg >= 0.35) {
+                        __instance.DamagePlayer(1, true, true, CauseOfDeath.Abandoned);
+                        Plugin.Instance.timeSinceLastDmg = 0;
+                    }
+                    
+                    
+                } else {
+                    if (__instance.insanityLevel >= 45) {
+                        Plugin.Instance.modScareFactor = 0.42f;
+                    } else {
+                        if (__instance.insanityLevel >= 35) {
+                            Plugin.Instance.modScareFactor = 0.15f;
+                        }
+                    }
+                }
+            }
+
+            if (Plugin.Instance.extrovert && GameNetworkManager.Instance.localPlayerController.Equals(__instance)) {
+                if (__instance.insanitySpeedMultiplier < 0) {
+                    __instance.insanitySpeedMultiplier -= 1.5f;
+                }
+                if (__instance.insanitySpeedMultiplier > 0) {
+                    __instance.insanitySpeedMultiplier += 0.7f;
+                }
+                
+                __instance.insanityLevel = Mathf.MoveTowards(__instance.insanityLevel, __instance.maxInsanityLevel, (float)(Time.deltaTime * __instance.insanitySpeedMultiplier*1.4));
+                if (__instance.insanityLevel < 0f) {
+                    __instance.insanityLevel = 0f;
+                }
+                 if (__instance.insanityLevel > 50f) {
+                    __instance.insanityLevel = 50f;
+                }
+                if (__instance.insanityLevel >= 50) {
+                    Plugin.Instance.modScareFactor = 0.76f;
+                    if (Plugin.Instance.timeSinceLastDmg >= 0.35) {
                         __instance.DamagePlayer(1, true, true, CauseOfDeath.Abandoned);
                         Plugin.Instance.timeSinceLastDmg = 0;
                     }
@@ -84,6 +119,19 @@ namespace HandicapCompany.patches {
             } else {
                 if (Plugin.Instance.modScareFactor < prevscare) {
                      StartOfRound.Instance.fearLevel = Plugin.Instance.modScareFactor;
+                }
+            }
+            if (Plugin.Instance.paranoid && GameNetworkManager.Instance.localPlayerController.Equals(__instance)) {
+                if (Plugin.Instance.timeSinceLastDmg > 10) {
+                    Plugin.Instance.timeSinceLastDmg = 0;
+                    switch (new System.Random().Next(0,8)) {
+                        case 0:
+                            __instance.DamagePlayer(0,true);
+                            break;
+                        case 1:
+                            RoundManager.Instance.FlickerLights(true);
+                            break;
+                    }
                 }
             }
             if (Plugin.Instance.conductive && GameNetworkManager.Instance.localPlayerController.Equals(__instance)) {

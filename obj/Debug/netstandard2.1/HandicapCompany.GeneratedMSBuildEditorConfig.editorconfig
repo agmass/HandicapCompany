@@ -1,3 +1,5 @@
 is_global = true
 build_property.RootNamespace = HandicapCompany
-build_property.ProjectDir = /home/agmas/ALVR/LethalCompanyModdingWiki-main/HandicapCompany/
+build_property.ProjectDir = /home/agmas/Downloads/HandicapCompany-main/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 

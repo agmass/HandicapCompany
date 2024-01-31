@@ -1,6 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
+using GameNetcodeStuff;
 using HarmonyLib;
+using UnityEngine;
+using UnityEngine.AI;
 
 namespace HandicapCompany.patches {
     [HarmonyPatch(typeof(RoundManager))]
@@ -21,6 +26,7 @@ namespace HandicapCompany.patches {
             Plugin.Instance.illiterate = false;
             Plugin.Instance.weak = false;
             Plugin.Instance.weighty = false;
+            Plugin.Instance.extrovert = false;
             Plugin.Instance.paranoid = false;
             Plugin.Instance.conductive = false;
             GameNetworkManager.Instance.localPlayerController.carryWeight = 1f;
@@ -32,15 +38,15 @@ namespace HandicapCompany.patches {
         [HarmonyPatch(typeof(RoundManager), "GenerateNewLevelClientRpc")]
         [HarmonyPostfix]
         static void gammaPatch(RoundManager __instance) {
-            if (!Plugin.Instance.blind && !Plugin.Instance.mute && !Plugin.Instance.deaf && !Plugin.Instance.palsy && !Plugin.Instance.crippled && !Plugin.Instance.illiterate && !Plugin.Instance.introvert && !Plugin.Instance.weak && !Plugin.Instance.weighty) {
+            if (!Plugin.Instance.blind && !Plugin.Instance.mute && !Plugin.Instance.deaf && !Plugin.Instance.palsy && !Plugin.Instance.crippled && !Plugin.Instance.illiterate && !Plugin.Instance.introvert && !Plugin.Instance.weak && !Plugin.Instance.weighty && !Plugin.Instance.conductive && !Plugin.Instance.extrovert) {
             Plugin.Instance.reloadConfig();
-            if ((100-Plugin.Instance.handicapChance.Value) < new Random().Next(0,101)) {
-            int disability = Plugin.Instance.available[new Random().Next(0,Plugin.Instance.available.Count)];
+            if ((100-Plugin.Instance.handicapChance.Value) < new System.Random().Next(0,101)) {
+            int disability = Plugin.Instance.available[new System.Random().Next(0,Plugin.Instance.available.Count)];
             switch(disability) {
                 case 0:
                     IngamePlayerSettings.Instance.ChangeGamma(-95);
                     Plugin.Instance.blind = true;
-                    HUDManager.Instance.AddTextToChatOnServer("[Hc] Got the handicap: Blind", (int)GameNetworkManager.Instance.localPlayerController.playerClientId);
+                    HUDManager.Instance.AddTextToChatOnServer("[HC] Got the handicap: Blind", (int)GameNetworkManager.Instance.localPlayerController.playerClientId);
                     HUDManager.Instance.DisplayTip("Handicap Company", "You're blind!\nYou can still see, but not that well... Good luck!", true);
                     break;
                 case 1:
@@ -90,12 +96,17 @@ namespace HandicapCompany.patches {
                 case 9:
                     Plugin.Instance.paranoid = true;
                     HUDManager.Instance.AddTextToChatOnServer("[HC] Got the handicap: Paranoid", (int)GameNetworkManager.Instance.localPlayerController.playerClientId);
-                    HUDManager.Instance.DisplayTip("Handicap Company", "You're Paranoid\nFear damages you.", true);
+                    HUDManager.Instance.DisplayTip("Handicap Company", "You're Paranoid\nFear damages you.\nYou also seem to get scared by seemingly nothing..?", true);
                     break;
                 case 10:
                     Plugin.Instance.conductive = true;
                     HUDManager.Instance.AddTextToChatOnServer("[HC] Got the handicap: Conductive", (int)GameNetworkManager.Instance.localPlayerController.playerClientId);
                     HUDManager.Instance.DisplayTip("Handicap Company", "You're Conductive\nFor the love of god, don't take metal.", true);
+                    break;
+                case 11:
+                    Plugin.Instance.extrovert = true;
+                    HUDManager.Instance.AddTextToChatOnServer("[HC] Got the handicap: Extrovert", (int)GameNetworkManager.Instance.localPlayerController.playerClientId);
+                    HUDManager.Instance.DisplayTip("Handicap Company", "You're an Extrovert!\nYou get more paranoid when you're not with people..\nDon't get too paranoid or you'll take damage!", true);
                     break;
                 }
             } else {
@@ -104,4 +115,5 @@ namespace HandicapCompany.patches {
             }
         }
     }
+    
 }

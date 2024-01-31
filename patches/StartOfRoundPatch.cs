@@ -23,6 +23,7 @@ namespace HandicapCompany.patches {
             Plugin.Instance.introvert = false;
             Plugin.Instance.weak = false;
             Plugin.Instance.paranoid = false;
+            Plugin.Instance.extrovert = false;
             Plugin.Instance.weighty = false;
             Plugin.Instance.conductive = false;
             GameNetworkManager.Instance.localPlayerController.carryWeight = 1f;
