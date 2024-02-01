@@ -14,6 +14,7 @@ namespace HandicapCompany.patches {
          [HarmonyPatch(typeof(PlayerControllerB), "SpectateNextPlayer")]
         [HarmonyPostfix]    
         static void undo(PlayerControllerB __instance) {
+            Plugin.Instance.stopHandicapStacking = false;
             Plugin.Instance.mute = false;
             Plugin.Instance.deaf = false;
             if (Plugin.Instance.palsy) {
@@ -65,6 +66,7 @@ namespace HandicapCompany.patches {
                 } else {
                     if (__instance.insanityLevel >= 45) {
                         Plugin.Instance.modScareFactor = 0.42f;
+                        HUDManager.Instance.DisplayTip("Handicap Company", "Get away from people!\nYou'll start taking damage due to\nbeing introverted!", true, true, "HC_Intro");
                     } else {
                         if (__instance.insanityLevel >= 35) {
                             Plugin.Instance.modScareFactor = 0.15f;
@@ -99,6 +101,7 @@ namespace HandicapCompany.patches {
                 } else {
                     if (__instance.insanityLevel >= 45) {
                         Plugin.Instance.modScareFactor = 0.42f;
+                        HUDManager.Instance.DisplayTip("Handicap Company", "Get back to people!\nYou'll start taking damage due to\nbeing extroverted!", true, true, "HC_Extro");
                     } else {
                         if (__instance.insanityLevel >= 35) {
                             Plugin.Instance.modScareFactor = 0.15f;
@@ -130,6 +133,9 @@ namespace HandicapCompany.patches {
                             break;
                         case 1:
                             RoundManager.Instance.FlickerLights(true);
+                            break;
+                        case 2:
+                            HUDManager.Instance.DisplayTip("boo", "did i scare you", true);
                             break;
                     }
                 }

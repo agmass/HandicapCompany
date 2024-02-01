@@ -23,6 +23,8 @@ namespace HandicapCompany
         public float modScareFactor = 0;
         public int ogSense = 0;
 
+        public bool stopHandicapStacking = false;
+
         public bool blind = false;
         public bool mute = false;
         public bool palsy = false;
@@ -40,6 +42,7 @@ namespace HandicapCompany
         public ConfigEntry<string> availableHandicaps;
         public List<int> available;
         public ConfigEntry<int> handicapChance;
+        public ConfigEntry<int> chatAnnouncement;
         public ConfigEntry<bool> allowMuteWhileMuted;
         public ConfigEntry<bool> allowMuteWhileSolo;
         public ConfigEntry<bool> allowIntroExtroWhileSolo;
@@ -60,18 +63,22 @@ namespace HandicapCompany
             handicapChance = Config.Bind("General",      // The section under which the option is shown
                                          "HandiChance",  // The key of the configuration option in the configuration file
                                          100, // The default value
-                                         "Chance to be handicapped. Does not sync between host and client."); // Description of the option to show in the config fil
+                                         "Chance to be handicapped. Does not sync between host and client."); // Description of the option to show in the config fil   
+            chatAnnouncement = Config.Bind("General",      // The section under which the option is shown
+                                         "Chat Announcement Type",  // The key of the configuration option in the configuration file
+                                         0, // The default value
+                                         "0 = Announces in chat normally.\n1 = Compact, only sends \"[HC] handicap\".\n2 = No message."); // Description of the option to show in the config fil
              mls.LogInfo("Binding Finished, Reading info from: " + availableHandicaps.Value);
             allowMuteWhileMuted = Config.Bind("Auto-Disable",      // The section under which the option is shown
-                                         "amwm",  // The key of the configuration option in the configuration file
+                                         "Disable Mute while Muted",  // The key of the configuration option in the configuration file
                                          false, // The default value
                                          "Allows you to get mute when your microphone settings are off."); // Description of the option to show in the config file
             allowMuteWhileSolo = Config.Bind("Auto-Disable",      // The section under which the option is shown
-                                         "amws",  // The key of the configuration option in the configuration file
+                                         "Disable Mute when Solo",  // The key of the configuration option in the configuration file
                                          false, // The default value
                                          "Allows you to get mute when you're alone."); // Description of the option to show in the config file
             allowIntroExtroWhileSolo = Config.Bind("Auto-Disable",      // The section under which the option is shown
-                                         "aiews",  // The key of the configuration option in the configuration file
+                                         "Disable Verts while Solo",  // The key of the configuration option in the configuration file
                                          false, // The default value
                                          "Allows you to get Introvet/Extrovert when you're alone.\nTHIS USES THE SANITY VALUES, WHICH IN SINGLEPLAYER, RISE WHEN IN THE SHIP OR FACILITY, BUT LOWER OUTSIDE."); // Description of the option to show in the config file
             available = new List<int>();
