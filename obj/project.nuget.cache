@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dB5NfZWRxhUB46M7inw3oJv/fVSoSrUuK+5GvG8sfdJ4FcQVJXuOVX6SWQ7k7xEzrWs5iYfruAiqCkGD+mtM2w==",
+  "dgSpecHash": "VCTr+wipsaFjzoF9A7qFVHM1YGoZnHzoRkf0MMzL6zB0tNnIqisRkTCPqpVMi/HIFWnLQUOw/hqFV9Zwz6FjfQ==",
   "success": true,
-  "projectFilePath": "/home/agmas/Downloads/HandicapCompany-main/HandicapCompany.csproj",
+  "projectFilePath": "/home/agmas/ALVR/LethalCompanyModdingWiki-main/HandicapCompany/HandicapCompany.csproj",
   "expectedPackageFiles": [
     "/home/agmas/.nuget/packages/bepinex.analyzers/1.0.8/bepinex.analyzers.1.0.8.nupkg.sha512",
     "/home/agmas/.nuget/packages/bepinex.baselib/5.4.20/bepinex.baselib.5.4.20.nupkg.sha512",
@@ -41,8 +41,7 @@
     "/home/agmas/.nuget/packages/system.text.encoding/4.3.0/system.text.encoding.4.3.0.nupkg.sha512",
     "/home/agmas/.nuget/packages/system.threading/4.3.0/system.threading.4.3.0.nupkg.sha512",
     "/home/agmas/.nuget/packages/system.threading.tasks/4.3.0/system.threading.tasks.4.3.0.nupkg.sha512",
-    "/home/agmas/.nuget/packages/unityengine.modules/2022.3.9/unityengine.modules.2022.3.9.nupkg.sha512",
-    "/home/agmas/.nuget/packages/netstandard.library.ref/2.1.0/netstandard.library.ref.2.1.0.nupkg.sha512"
+    "/home/agmas/.nuget/packages/unityengine.modules/2022.3.9/unityengine.modules.2022.3.9.nupkg.sha512"
   ],
   "logs": []
 }

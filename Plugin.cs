@@ -38,6 +38,10 @@ namespace HandicapCompany
         public bool weighty = false;
         public bool paranoid = false;
         public bool conductive = false;
+        public bool hyperactive = false;
+
+        public bool intipShown = false;
+        public bool extipShown = false;
 
         public ConfigEntry<string> availableHandicaps;
         public List<int> available;
@@ -58,7 +62,7 @@ namespace HandicapCompany
             mls.LogInfo("Load/Reload Config");
             availableHandicaps = Config.Bind("General",      // The section under which the option is shown
                                          "AvailableHandicaps",  // The key of the configuration option in the configuration file
-                                         "Blind,Deaf,Mute,Palsy,Legs,NoUI,Intro,Weak,Weight,Paranoid,Conduct,Extro", // The default value
+                                         "Blind,Deaf,Mute,Palsy,Legs,NoUI,Intro,Weak,Weight,Paranoid,Conduct,Extro,Hyper", // The default value
                                          "All the available handicaps, sperated by \",\". Does not sync between host and client."); // Description of the option to show in the config file
             handicapChance = Config.Bind("General",      // The section under which the option is shown
                                          "HandiChance",  // The key of the configuration option in the configuration file
@@ -70,15 +74,15 @@ namespace HandicapCompany
                                          "0 = Announces in chat normally.\n1 = Compact, only sends \"[HC] handicap\".\n2 = No message."); // Description of the option to show in the config fil
              mls.LogInfo("Binding Finished, Reading info from: " + availableHandicaps.Value);
             allowMuteWhileMuted = Config.Bind("Auto-Disable",      // The section under which the option is shown
-                                         "Disable Mute while Muted",  // The key of the configuration option in the configuration file
+                                         "Allow Mute while Muted",  // The key of the configuration option in the configuration file
                                          false, // The default value
                                          "Allows you to get mute when your microphone settings are off."); // Description of the option to show in the config file
             allowMuteWhileSolo = Config.Bind("Auto-Disable",      // The section under which the option is shown
-                                         "Disable Mute when Solo",  // The key of the configuration option in the configuration file
+                                         "Allow Mute when Solo",  // The key of the configuration option in the configuration file
                                          false, // The default value
                                          "Allows you to get mute when you're alone."); // Description of the option to show in the config file
             allowIntroExtroWhileSolo = Config.Bind("Auto-Disable",      // The section under which the option is shown
-                                         "Disable Verts while Solo",  // The key of the configuration option in the configuration file
+                                         "Allow Verts while Solo",  // The key of the configuration option in the configuration file
                                          false, // The default value
                                          "Allows you to get Introvet/Extrovert when you're alone.\nTHIS USES THE SANITY VALUES, WHICH IN SINGLEPLAYER, RISE WHEN IN THE SHIP OR FACILITY, BUT LOWER OUTSIDE."); // Description of the option to show in the config file
             available = new List<int>();
@@ -122,6 +126,9 @@ namespace HandicapCompany
                     case "extro":
                         available.Add(11);
                         continue;
+                    case "hyper":
+                        available.Add(12);
+                        continue;
                 }
             }
         }
@@ -149,14 +156,14 @@ namespace HandicapCompany
         
             prv = Config.Bind("__Do not touch",      // The section under which the option is shown
                                          "prv",  // The key of the configuration option in the configuration file
-                                         "0.4.0", // The default value
+                                         "0.4.1", // The default value
                                          "Do not change, Used to automatically add new handicaps when they come out!"); // Description of the option to show in the config file
 
 
             reloadConfig();
-            if (prv.Value != "0.4.1") {
-                availableHandicaps.SetSerializedValue("Blind,Deaf,Mute,Palsy,Legs,NoUI,Intro,Weak,Weight,Paranoid,Conduct,Extro");
-                prv.SetSerializedValue("0.4.1");
+            if (prv.Value != "0.4.2") {
+                availableHandicaps.SetSerializedValue("Blind,Deaf,Mute,Palsy,Legs,NoUI,Intro,Weak,Weight,Paranoid,Conduct,Extro,Hyper");
+                prv.SetSerializedValue("0.4.2");
                 reloadConfig();
              }
             mls.LogInfo(available);

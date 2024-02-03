@@ -4,6 +4,8 @@ using HandicapCompany;
 using GameNetcodeStuff;
 using UnityEngine;
 using DigitalRuby.ThunderAndLightning;
+using System.Numerics;
+using System.Collections;
 
 
 namespace HandicapCompany.patches {
@@ -30,6 +32,7 @@ namespace HandicapCompany.patches {
             Plugin.Instance.paranoid = false;
             Plugin.Instance.conductive = false;
             Plugin.Instance.extrovert = false;
+            Plugin.Instance.hyperactive = false;
             GameNetworkManager.Instance.localPlayerController.carryWeight = 1f;
             HUDManager.Instance.HideHUD(false);
             IngamePlayerSettings.Instance.LoadSettingsFromPrefs();
@@ -66,7 +69,10 @@ namespace HandicapCompany.patches {
                 } else {
                     if (__instance.insanityLevel >= 45) {
                         Plugin.Instance.modScareFactor = 0.42f;
-                        HUDManager.Instance.DisplayTip("Handicap Company", "Get away from people!\nYou'll start taking damage due to\nbeing introverted!", true, true, "HC_Intro");
+                        if (!Plugin.Instance.intipShown) {
+                            Plugin.Instance.intipShown = true;
+                            HUDManager.Instance.DisplayTip("Handicap Company", "Get away from people!\nYou'll start taking damage due to\nbeing introverted!", true);
+                        }
                     } else {
                         if (__instance.insanityLevel >= 35) {
                             Plugin.Instance.modScareFactor = 0.15f;
@@ -101,7 +107,10 @@ namespace HandicapCompany.patches {
                 } else {
                     if (__instance.insanityLevel >= 45) {
                         Plugin.Instance.modScareFactor = 0.42f;
-                        HUDManager.Instance.DisplayTip("Handicap Company", "Get back to people!\nYou'll start taking damage due to\nbeing extroverted!", true, true, "HC_Extro");
+                        if (!Plugin.Instance.extipShown) {
+                            Plugin.Instance.extipShown = true;
+                            HUDManager.Instance.DisplayTip("Handicap Company", "Get back to people!\nYou'll start taking damage due to\nbeing extroverted!", true);
+                        }
                     } else {
                         if (__instance.insanityLevel >= 35) {
                             Plugin.Instance.modScareFactor = 0.15f;
@@ -111,12 +120,54 @@ namespace HandicapCompany.patches {
             }
         }
 
+        [HarmonyPatch(typeof(PlayerControllerB), "Crouch")]
+        [HarmonyPrefix]
+        public static bool gammaPatch5(PlayerControllerB __instance) {
+            if (Plugin.Instance.hyperactive) {
+                return false;
+            }
+            return true;
+        }
+
+        [HarmonyPatch(typeof(PlayerControllerB), "Crouch_performed")]
+        [HarmonyPrefix]
+        public static bool nuhUh(PlayerControllerB __instance) {
+            if (Plugin.Instance.hyperactive) {
+                HUDManager.Instance.DisplayTip("Handicap Company", "nuh uh");
+                return false;
+            }
+            return true;
+        }
+
+
         [HarmonyPatch(typeof(PlayerControllerB), "Update")]
         [HarmonyPostfix]
         public static void gammaPatch(PlayerControllerB __instance) {
+            if (Plugin.Instance.hyperactive && GameNetworkManager.Instance.localPlayerController.Equals(__instance) && StartOfRound.Instance.shipHasLanded) {
+                if (__instance.moveInputVector.Equals(UnityEngine.Vector2.zero)) {
+                    Plugin.Instance.modScareFactor += (float)(Time.deltaTime*1.5);
+                    if (Plugin.Instance.modScareFactor > 0.74f) {
+                        Plugin.Instance.modScareFactor = 0.74f;
+                    }
+                    if (Plugin.Instance.modScareFactor >= 0.74f) {
+                        if (Plugin.Instance.timeSinceLastDmg > 0.025f) {
+                            Plugin.Instance.timeSinceLastDmg = 0;
+                            __instance.DamagePlayer(1, true, true, CauseOfDeath.Crushing);
+                        }
+                    }
+                } else {
+                    Plugin.Instance.modScareFactor -= Time.deltaTime/2;
+                }
+            }
             Plugin.Instance.timeSinceLastDmg += Time.deltaTime;
             float prevscare = Plugin.Instance.modScareFactor;
             Plugin.Instance.modScareFactor -= Time.deltaTime/100;
+            if (Plugin.Instance.modScareFactor < 0f) {
+                Plugin.Instance.modScareFactor = 0f;
+            }
+            if (Plugin.Instance.modScareFactor > 1f) {
+                Plugin.Instance.modScareFactor = 1f;
+            }
             if (StartOfRound.Instance.fearLevel < Plugin.Instance.modScareFactor) {
                 StartOfRound.Instance.fearLevel = Plugin.Instance.modScareFactor;
             } else {
@@ -124,10 +175,11 @@ namespace HandicapCompany.patches {
                      StartOfRound.Instance.fearLevel = Plugin.Instance.modScareFactor;
                 }
             }
+            
             if (Plugin.Instance.paranoid && GameNetworkManager.Instance.localPlayerController.Equals(__instance)) {
-                if (Plugin.Instance.timeSinceLastDmg > 10) {
+                if (Plugin.Instance.timeSinceLastDmg > 15) {
                     Plugin.Instance.timeSinceLastDmg = 0;
-                    switch (new System.Random().Next(0,8)) {
+                    switch (new System.Random().Next(0,10)) {
                         case 0:
                             __instance.DamagePlayer(0,true);
                             break;
@@ -141,13 +193,13 @@ namespace HandicapCompany.patches {
                 }
             }
             if (Plugin.Instance.conductive && GameNetworkManager.Instance.localPlayerController.Equals(__instance)) {
-                if (!__instance.isInsideFactory && !__instance.isInHangarShipRoom) {
-                    foreach (GrabbableObject g in __instance.ItemSlots) {
-                        if (g.itemProperties.isConductiveMetal) {
-                            if (Plugin.Instance.timeSinceLastDmg > 1.5) {
-                                Plugin.Instance.timeSinceLastDmg = 0;
+                if (Plugin.Instance.timeSinceLastDmg > 1.5) {
+                    Plugin.Instance.timeSinceLastDmg = 0;
+                    if (!__instance.isInsideFactory && !__instance.isInHangarShipRoom) {
+                        foreach (GrabbableObject g in __instance.ItemSlots) {
+                            if (g.itemProperties.isConductiveMetal) {
                                 if (new System.Random().Next(0,3) == 0) {
-                                    Landmine.SpawnExplosion(GameNetworkManager.Instance.localPlayerController.transform.position + Vector3.up * 0.25f, spawnExplosionEffect: true, 0.3f, 0.3f);
+                                    Landmine.SpawnExplosion(GameNetworkManager.Instance.localPlayerController.transform.position + UnityEngine.Vector3.up * 0.25f, spawnExplosionEffect: true, 0.3f, 0.3f);
                                     HUDManager.Instance.ShakeCamera(ScreenShakeType.Big);
                                     GameNetworkManager.Instance.localPlayerController.DamagePlayer(999, true, true, CauseOfDeath.Electrocution);
                                     HUDManager.Instance.DisplayTip("Handicap Company", "You were too conductive!\nYou exploded due to too much electricity.\nSkill issue", true);

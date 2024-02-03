@@ -2689,14 +2689,14 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/agmas/Downloads/HandicapCompany-main/HandicapCompany.csproj",
+      "projectUniqueName": "/home/agmas/ALVR/LethalCompanyModdingWiki-main/HandicapCompany/HandicapCompany.csproj",
       "projectName": "HandicapCompany",
-      "projectPath": "/home/agmas/Downloads/HandicapCompany-main/HandicapCompany.csproj",
+      "projectPath": "/home/agmas/ALVR/LethalCompanyModdingWiki-main/HandicapCompany/HandicapCompany.csproj",
       "packagesPath": "/home/agmas/.nuget/packages/",
-      "outputPath": "/home/agmas/Downloads/HandicapCompany-main/obj/",
+      "outputPath": "/home/agmas/ALVR/LethalCompanyModdingWiki-main/HandicapCompany/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/agmas/Downloads/HandicapCompany-main/NuGet.Config",
+        "/home/agmas/ALVR/LethalCompanyModdingWiki-main/HandicapCompany/NuGet.Config",
         "/home/agmas/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
@@ -2752,18 +2752,12 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "NETStandard.Library.Ref",
-            "version": "[2.1.0, 2.1.0]"
-          }
-        ],
         "frameworkReferences": {
           "NETStandard.Library": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.101/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/7.0.113/RuntimeIdentifierGraph.json"
       }
     }
   }

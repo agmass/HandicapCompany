@@ -29,6 +29,7 @@ namespace HandicapCompany.patches {
             Plugin.Instance.weighty = false;
             Plugin.Instance.extrovert = false;
             Plugin.Instance.paranoid = false;
+            Plugin.Instance.hyperactive = false;
             Plugin.Instance.conductive = false;
             GameNetworkManager.Instance.localPlayerController.carryWeight = 1f;
             HUDManager.Instance.HideHUD(false);
@@ -36,12 +37,20 @@ namespace HandicapCompany.patches {
             IngamePlayerSettings.Instance.UpdateGameToMatchSettings();
         }
 
+        static IEnumerator hyperTip() {
+            yield return new WaitForSeconds(4);
+            HUDManager.Instance.DisplayTip("Handicap Company", "You have a short grace period until the ship lands.\nGood luck!");
+        }
+
         [HarmonyPatch(typeof(RoundManager), "GenerateNewLevelClientRpc")]
         [HarmonyPostfix]
         static void gammaPatch(RoundManager __instance) {
+            if (Plugin.Instance.palsy) {
+                IngamePlayerSettings.Instance.settings.lookSensitivity = Plugin.Instance.ogSense;
+            }
             if (!Plugin.Instance.stopHandicapStacking) {
             Plugin.Instance.reloadConfig();
-            if (StartOfRound.Instance.connectedPlayersAmount <= 0 && !Plugin.Instance.allowMuteWhileSolo.Value || IngamePlayerSettings.Instance.settings.micEnabled  && !Plugin.Instance.allowMuteWhileMuted.Value) {
+            if (StartOfRound.Instance.connectedPlayersAmount <= 0 && !Plugin.Instance.allowMuteWhileSolo.Value || !IngamePlayerSettings.Instance.settings.micEnabled  && !Plugin.Instance.allowMuteWhileMuted.Value) {
                 Plugin.Instance.available.Remove(1);
                 Plugin.Instance.mls.LogWarning("Removed Mute");
             }
@@ -97,7 +106,7 @@ namespace HandicapCompany.patches {
                     break;
                 case 7:
                     Plugin.Instance.weighty = true;
-                    name = "Weight";
+                    name = "Weighty";
                     HUDManager.Instance.DisplayTip("Handicap Company", "You're Weighty!\nYou naturally gained some weight.", true);
                     break;
                 case 8:
@@ -119,6 +128,13 @@ namespace HandicapCompany.patches {
                     Plugin.Instance.extrovert = true;   
                     name = "Extroverted";      
                     HUDManager.Instance.DisplayTip("Handicap Company", "You're an Extrovert!\nYou get more paranoid when you're not with people..\nDon't get too paranoid or you'll take damage!", true);
+                    break;
+                case 12:
+                    GameNetworkManager.Instance.localPlayerController.Crouch(false);
+                    Plugin.Instance.hyperactive = true;   
+                    name = "Hyperactive";      
+                    __instance.StartCoroutine(hyperTip());
+                    HUDManager.Instance.DisplayTip("Handicap Company", "You're Hyperactive!\nYou can't crouch and must keep moving.", true);
                     break;
                 }
                 if (Plugin.Instance.chatAnnouncement.Value == 0) {

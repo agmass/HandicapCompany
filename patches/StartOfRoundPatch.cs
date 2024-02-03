@@ -26,6 +26,7 @@ namespace HandicapCompany.patches {
             Plugin.Instance.extrovert = false;
             Plugin.Instance.stopHandicapStacking = false;
             Plugin.Instance.weighty = false;
+            Plugin.Instance.hyperactive = false;
             Plugin.Instance.conductive = false;
             GameNetworkManager.Instance.localPlayerController.carryWeight = 1f;
             HUDManager.Instance.HideHUD(false);
