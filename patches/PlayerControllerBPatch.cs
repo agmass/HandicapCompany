@@ -123,7 +123,7 @@ namespace HandicapCompany.patches {
         [HarmonyPatch(typeof(PlayerControllerB), "Crouch")]
         [HarmonyPrefix]
         public static bool gammaPatch5(PlayerControllerB __instance) {
-            if (Plugin.Instance.hyperactive) {
+            if (Plugin.Instance.hyperactive && GameNetworkManager.Instance.localPlayerController.Equals(__instance)) {
                 return false;
             }
             return true;
@@ -132,7 +132,7 @@ namespace HandicapCompany.patches {
         [HarmonyPatch(typeof(PlayerControllerB), "Crouch_performed")]
         [HarmonyPrefix]
         public static bool nuhUh(PlayerControllerB __instance) {
-            if (Plugin.Instance.hyperactive) {
+            if (Plugin.Instance.hyperactive && GameNetworkManager.Instance.localPlayerController.Equals(__instance)) {
                 HUDManager.Instance.DisplayTip("Handicap Company", "nuh uh");
                 return false;
             }
