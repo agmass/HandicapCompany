@@ -6,6 +6,7 @@ using UnityEngine;
 using DigitalRuby.ThunderAndLightning;
 using System.Numerics;
 using System.Collections;
+using Dissonance;
 
 
 namespace HandicapCompany.patches {
@@ -24,6 +25,9 @@ namespace HandicapCompany.patches {
             }
             Plugin.Instance.palsy = false;
             Plugin.Instance.blind = false;
+            Plugin.Instance.talkative = false;
+            Plugin.Instance.drunk = false;
+            GameNetworkManager.Instance.localPlayerController.drunkness = 0f;
             Plugin.Instance.crippled = false;
             Plugin.Instance.introvert = false;
             Plugin.Instance.illiterate = false;
@@ -197,9 +201,15 @@ namespace HandicapCompany.patches {
                     Plugin.Instance.timeSinceLastDmg = 0;
                     if (!__instance.isInsideFactory && !__instance.isInHangarShipRoom) {
                         foreach (GrabbableObject g in __instance.ItemSlots) {
+                            if (g == null) {
+                                continue;
+                            }
+                            if (g.itemProperties == null) {
+                                continue;
+                            }
                             if (g.itemProperties.isConductiveMetal) {
                                 if (new System.Random().Next(0,3) == 0) {
-                                    Landmine.SpawnExplosion(GameNetworkManager.Instance.localPlayerController.transform.position + UnityEngine.Vector3.up * 0.25f, spawnExplosionEffect: true, 0.3f, 0.3f);
+                                    Landmine.SpawnExplosion(GameNetworkManager.Instance.localPlayerController.transform.position + UnityEngine.Vector3.up * 0.25f, spawnExplosionEffect: false, 2.4f, 5f);
                                     HUDManager.Instance.ShakeCamera(ScreenShakeType.Big);
                                     GameNetworkManager.Instance.localPlayerController.DamagePlayer(999, true, true, CauseOfDeath.Electrocution);
                                     HUDManager.Instance.DisplayTip("Handicap Company", "You were too conductive!\nYou exploded due to too much electricity.\nSkill issue", true);
@@ -214,6 +224,23 @@ namespace HandicapCompany.patches {
                     __instance.carryWeight = 1.6f;
                 }
             }
+            if (Plugin.Instance.drunk && GameNetworkManager.Instance.localPlayerController.Equals(__instance)) {
+                GameNetworkManager.Instance.localPlayerController.drunkness = 0.75f;
+            }
+            if (Plugin.Instance.talkative && GameNetworkManager.Instance.localPlayerController.Equals(__instance)) {
+                if (!IngamePlayerSettings.Instance.settings.micEnabled || (UnityEngine.Object)(object)StartOfRound.Instance.voiceChatModule == (UnityEngine.Object)null)
+			    {
+        
+                } else {
+                    VoicePlayerState val = StartOfRound.Instance.voiceChatModule.FindPlayer(StartOfRound.Instance.voiceChatModule.LocalPlayerName);
+                    if (val.IsSpeaking)
+			        {
+				        float num = Mathf.Clamp(val.Amplitude*140f, 0f, 4.6f);
+				        __instance.movementSpeed = num;
+			        }
+                }
+			    
+            }
             if (Plugin.Instance.weak && GameNetworkManager.Instance.localPlayerController.Equals(__instance) && __instance.twoHanded && Plugin.Instance.timeSinceLastDmg >= 0.5) {
                 __instance.DamagePlayer(1, true, true, CauseOfDeath.Gravity);
                 Plugin.Instance.timeSinceLastDmg = 0;
@@ -221,6 +248,7 @@ namespace HandicapCompany.patches {
             if (Plugin.Instance.illiterate && GameNetworkManager.Instance.localPlayerController.Equals(__instance)) {
                 HUDManager.Instance.HideHUD(true);
             }
+            
             if (Plugin.Instance.crippled && GameNetworkManager.Instance.localPlayerController.Equals(__instance)) {
                 if (__instance.health > 15) {
                     __instance.health = 15;

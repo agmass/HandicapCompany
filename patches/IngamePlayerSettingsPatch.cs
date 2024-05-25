@@ -11,6 +11,7 @@ namespace HandicapCompany.patches {
         [HarmonyPrefix]
         public static bool gammaPatch2(IngamePlayerSettings __instance) {
             if (Plugin.Instance.blind && Plugin.Instance.mute && Plugin.Instance.palsy && Plugin.Instance.deaf) {
+                HUDManager.Instance.DisplayTip("Handicap Company", "You cannot change settings when \nbeing blind, deaf, mute or palsy!");
                 return false;
             }
             return true;

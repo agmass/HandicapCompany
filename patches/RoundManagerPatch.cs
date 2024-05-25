@@ -22,6 +22,8 @@ namespace HandicapCompany.patches {
             Plugin.Instance.stopHandicapStacking = false;
             Plugin.Instance.palsy = false;
             Plugin.Instance.blind = false;
+            Plugin.Instance.talkative = false;
+            Plugin.Instance.drunk = false;
             Plugin.Instance.crippled = false;
             Plugin.Instance.introvert = false;
             Plugin.Instance.illiterate = false;
@@ -32,6 +34,7 @@ namespace HandicapCompany.patches {
             Plugin.Instance.hyperactive = false;
             Plugin.Instance.conductive = false;
             GameNetworkManager.Instance.localPlayerController.carryWeight = 1f;
+            GameNetworkManager.Instance.localPlayerController.drunkness = 0f;
             HUDManager.Instance.HideHUD(false);
             IngamePlayerSettings.Instance.LoadSettingsFromPrefs();
             IngamePlayerSettings.Instance.UpdateGameToMatchSettings();
@@ -135,6 +138,17 @@ namespace HandicapCompany.patches {
                     name = "Hyperactive";      
                     __instance.StartCoroutine(hyperTip());
                     HUDManager.Instance.DisplayTip("Handicap Company", "You're Hyperactive!\nYou can't crouch and must keep moving.", true);
+                    break;
+                case 13:
+                    Plugin.Instance.talkative = true;
+            GameNetworkManager.Instance.localPlayerController.drunkness = 0.2f;
+                    name = "Talkative";
+                    HUDManager.Instance.DisplayTip("Handicap Company", "You're Talkative!\nTalking controls your player speed!", true);
+                    break;
+                case 14:
+                    Plugin.Instance.drunk = true;
+                    name = "Drunk";
+                    HUDManager.Instance.DisplayTip("Handicap Company", "You're Drunk!\nYou're.. drunk. idk how else i'm supposed to explain that", true);
                     break;
                 }
                 if (Plugin.Instance.chatAnnouncement.Value == 0) {

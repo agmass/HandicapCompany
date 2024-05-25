@@ -23,6 +23,10 @@ namespace HandicapCompany.patches {
             Plugin.Instance.introvert = false;
             Plugin.Instance.weak = false;
             Plugin.Instance.paranoid = false;
+            Plugin.Instance.talkative = false;
+            Plugin.Instance.drunk = false;
+
+                GameNetworkManager.Instance.localPlayerController.drunkness = 0f;
             Plugin.Instance.extrovert = false;
             Plugin.Instance.stopHandicapStacking = false;
             Plugin.Instance.weighty = false;

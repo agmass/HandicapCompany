@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "VCTr+wipsaFjzoF9A7qFVHM1YGoZnHzoRkf0MMzL6zB0tNnIqisRkTCPqpVMi/HIFWnLQUOw/hqFV9Zwz6FjfQ==",
+  "dgSpecHash": "OipCNP4qRI0g4yjBpUf/UpPbk/ko562DCsXa1d2e0vhTve3wZ5OnCsfugB5t/wv1wvc51u2iqdNOBORpE7hCkQ==",
   "success": true,
-  "projectFilePath": "/home/agmas/ALVR/LethalCompanyModdingWiki-main/HandicapCompany/HandicapCompany.csproj",
+  "projectFilePath": "/media/agmas/c893da77-a135-43ce-ba20-0bde37811828/a/ALVR/LethalCompanyModdingWiki-main/HandicapCompany/HandicapCompany.csproj",
   "expectedPackageFiles": [
     "/home/agmas/.nuget/packages/bepinex.analyzers/1.0.8/bepinex.analyzers.1.0.8.nupkg.sha512",
     "/home/agmas/.nuget/packages/bepinex.baselib/5.4.20/bepinex.baselib.5.4.20.nupkg.sha512",

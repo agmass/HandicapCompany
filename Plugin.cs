@@ -39,6 +39,8 @@ namespace HandicapCompany
         public bool paranoid = false;
         public bool conductive = false;
         public bool hyperactive = false;
+        public bool talkative = false;
+        public bool drunk = false;
 
         public bool intipShown = false;
         public bool extipShown = false;
@@ -62,7 +64,7 @@ namespace HandicapCompany
             mls.LogInfo("Load/Reload Config");
             availableHandicaps = Config.Bind("General",      // The section under which the option is shown
                                          "AvailableHandicaps",  // The key of the configuration option in the configuration file
-                                         "Blind,Deaf,Mute,Palsy,Legs,NoUI,Intro,Weak,Weight,Paranoid,Conduct,Extro,Hyper", // The default value
+                                         "Blind,Deaf,Mute,Palsy,Legs,NoUI,Intro,Weak,Weight,Paranoid,Conduct,Extro,Hyper,Drunk", // The default value
                                          "All the available handicaps, sperated by \",\". Does not sync between host and client."); // Description of the option to show in the config file
             handicapChance = Config.Bind("General",      // The section under which the option is shown
                                          "HandiChance",  // The key of the configuration option in the configuration file
@@ -129,6 +131,12 @@ namespace HandicapCompany
                     case "hyper":
                         available.Add(12);
                         continue;
+                    case "talk":
+                        available.Add(13);
+                        continue;
+                    case "drunk":
+                        available.Add(14);
+                        continue;
                 }
             }
         }
@@ -145,6 +153,7 @@ namespace HandicapCompany
             harmony.PatchAll(typeof(Plugin));
             harmony.PatchAll(typeof(StartOfRoundPatch));
             harmony.PatchAll(typeof(RoundManagerPatch));
+            
             harmony.PatchAll(typeof(IngamePlayerSettingsPatch));
             harmony.PatchAll(typeof(PlayerControllerBPatch));
             harmony.PatchAll(typeof(HUDManagerPatch));
@@ -156,14 +165,14 @@ namespace HandicapCompany
         
             prv = Config.Bind("__Do not touch",      // The section under which the option is shown
                                          "prv",  // The key of the configuration option in the configuration file
-                                         "0.4.1", // The default value
+                                         "0.4.3", // The default value
                                          "Do not change, Used to automatically add new handicaps when they come out!"); // Description of the option to show in the config file
 
 
             reloadConfig();
-            if (prv.Value != "0.4.2") {
-                availableHandicaps.SetSerializedValue("Blind,Deaf,Mute,Palsy,Legs,NoUI,Intro,Weak,Weight,Paranoid,Conduct,Extro,Hyper");
-                prv.SetSerializedValue("0.4.2");
+            if (prv.Value != "0.4.4") {
+                availableHandicaps.SetSerializedValue("Blind,Deaf,Mute,Palsy,Legs,NoUI,Intro,Weak,Weight,Paranoid,Conduct,Extro,Hyper,Talk,Drunk");
+                prv.SetSerializedValue("0.4.4");
                 reloadConfig();
              }
             mls.LogInfo(available);
